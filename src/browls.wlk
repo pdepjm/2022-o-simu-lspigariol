@@ -20,6 +20,7 @@ class Mision {
 	method puedeRealizarse()
 	method repartirCopas() 
 		
+	method cantCopas() = formaDePremiar.cantCopasFinal(self)
 	method sumarOrestar() = if(self.superada()) 1 else -1
 	
 }
@@ -36,25 +37,30 @@ class MisionIndividual inherits Mision {
 	override method personajeTieneEstrategia() = personaje.tieneEstrategia()
 	
 	override method repartirCopas() {
-		personaje.darCopas(self.premio()*self.sumarOrestar())
+		personaje.darCopas(self.cantCopas()*self.sumarOrestar())
 	}
 		  
-	method premio() = 
-		formaDePremiar.premioFinalInvividual(dificultad*2)
+	method cantCopasBase() = dificultad * 2
+		
+	method cantParticipantes() = 1
+	
+	method personaje(pers) {
+		personaje = pers
+	}
 }
 
 
 object bonus {
-	method premioFinalInvividual(valor) = valor +1
+	method cantCopasFinal(mision) = mision.cantCopasBase() + mision.cantParticipantes()
 }
 
 class Boost {
-	var property coeficiente 
-	method premioFinalInvividual(valor) = valor * coeficiente
+	var property multiplicador 
+	method cantCopasFinal(mision) = mision.cantCopasBase() * multiplicador
 }
 
 object normal {
-	method premioFinalInvividual(valor) = valor
+	method cantCopasFinal(mision) = mision.cantCopasBase()
 }
 
 
@@ -64,10 +70,10 @@ class MisionEquipo inherits Mision {
 	
 	
 	override method repartirCopas() {
-		personajes.forEach{p=>p.darCopas(self.premio()*self.sumarOrestar())}
+		personajes.forEach{p=>p.darCopas(self.cantCopas()*self.sumarOrestar())}
 	}
 		
-	method premio() = 50/ personajes.size()
+	method cantCopasBase() = 50/ personajes.size()
 	
 	override method destrezaSuficiente() = personajes.all{p=>p.destreza()>400} 
 
@@ -78,13 +84,14 @@ class MisionEquipo inherits Mision {
 	
 	override method puedeRealizarse() = personajes.sum{p=>p.copas()} >= 60
 	
+	method cantParticipantes() = personajes.size()
 		
 }
 
 
 class Personaje {
 	
-	var property copas 
+	var property copas = 0
 	
 	method darCopas(cantidad){
 		copas += cantidad
