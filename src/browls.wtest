@@ -1,0 +1,25 @@
+import browls.*
+
+describe "tests de browls" {
+	
+	const unaMision = new Mision()
+	const otraMision = new Mision()
+	
+	
+
+test "mision superada" {
+
+	
+	assert.that(unaMision.superada())
+
+}
+
+test "mision no superada" {
+
+	
+	assert.notThat(otraMision.superada())
+
+}
+
+
+}
