@@ -2,8 +2,12 @@ import browls.*
 
 describe "tests de browls" {
 	
-	const unaMision = new Mision()
-	const otraMision = new Mision()
+	const dibu = new Arquero(agilidad = 25, rango = 40)
+	const leia = new Guerrera(tieneEstrategia = false, fuerza = 100)
+	const marita = new Ballestero(agilidad = 200, rango = 101)
+	const unaMision = new MisionIndividual(dificultad = 100, personaje = dibu)
+	const otraMision = new MisionEquipo(personajes=[dibu,leia,marita])
+	const unaMisionSinPersonajes = new MisionEquipo()
 	
 	
 
@@ -14,10 +18,25 @@ test "mision superada" {
 
 }
 
+test "mision sin personajes, es tan trivial que puede ser superada" {
+
+	
+	assert.that(unaMisionSinPersonajes.superada())
+
+}
+
 test "mision no superada" {
 
 	
 	assert.notThat(otraMision.superada())
+
+}
+
+
+test "mision individual boost 3" {
+
+	var mision = new MisionIndividual(dificultad = 10, personaje = leia, formaDePremiar = new Boost(coeficiente = 3))
+	assert.notThat()
 
 }
 
