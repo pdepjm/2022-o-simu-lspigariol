@@ -1,0 +1,88 @@
+@startuml
+abstract class Mision {
+    formaDePremiar
+    superada() // entrada punto 1
+    realizar() // entrada punto 2
+}
+
+note left of Mision::superada
+  Punto de entrada del punto 1
+end note
+note left of Mision::realizar
+  Punto de entrada del punto 2
+end note
+
+class MisionIndividual {
+    personaje
+    destrezaSuficiente()
+    personajeTieneEstrategia()
+    puedeRealizarse()
+    repartirCopas()
+    cantCopasBase()
+}
+
+class MisionEquipo {
+    personajes
+    destrezaSuficiente()
+    personajeTieneEstrategia()
+    puedeRealizarse()
+    repartirCopas()
+    cantCopasBase()
+}
+
+class Personaje {
+   copas
+   darCopas(cant)
+}
+
+Mision <|-- MisionEquipo
+Mision <|-- MisionIndividual
+
+MisionEquipo -->"*" Personaje
+MisionIndividual --> Personaje
+
+class Arquero {
+  agilidad
+  rango
+  destreza()
+  tieneEstrategia()
+}
+class Ballestero {
+  destreza()
+}
+class Guerrera {
+  fuerza
+  destreza()
+  tieneEstrategia()
+}
+
+Personaje <|-- Arquero
+Personaje <|-- Guerrera
+Arquero <|-- Ballestero
+
+object bonus <<object>> {
+    cantCopasFinal(mision)   
+}
+object comun <<object>> {
+    cantCopasFinal(mision)   
+}
+class Boost <<object>> {
+    multiplicador
+    cantCopasFinal(mision)   
+}
+
+interface FormaDePremiar {
+    cantCopasFinal(mision)   
+}
+hide FormaDePremiar fields
+
+FormaDePremiar <|.. bonus
+FormaDePremiar <|.. Boost
+FormaDePremiar <|.. comun
+Mision -> FormaDePremiar
+
+bonus ..> Mision :usa
+comun ..> Mision
+Boost ..> Mision
+
+@enduml
